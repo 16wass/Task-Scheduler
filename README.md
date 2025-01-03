@@ -38,6 +38,7 @@ cd backend
 go run main.go
 
 cd frontend 
+cd task-scheduler
 npm run serve
 ```
 The frontend will run on  "http://localhost:5173"

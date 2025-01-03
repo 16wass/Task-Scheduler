@@ -11,11 +11,11 @@ export default {
   },
   methods: {
     async fetchTasks() {
-      const res = await fetch('http://localhost:5173/tasks');
+      const res = await fetch('http://localhost:8080/tasks');
       this.tasks = await res.json();
     },
     async addTask() {
-      await fetch('http://localhost:5173/tasks/create', {
+      await fetch('http://localhost:8080/tasks/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.newTask)
