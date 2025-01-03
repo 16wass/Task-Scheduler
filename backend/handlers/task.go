@@ -16,6 +16,7 @@ var tasks = []Task{}
 
 // getting tasks
 func GetTask(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tasks)
 }
 
@@ -27,4 +28,5 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		tasks,
 		task,
 	)
+	w.WriteHeader(http.StatusCreated)
 }

@@ -8,20 +8,38 @@ export default {
         description :""
       }
     };
+  },
+  methods: {
+    async fetchTasks() {
+      const res = await fetch('http://localhost:5173/tasks');
+      this.tasks = await res.json();
+    },
+    async addTask() {
+      await fetch('http://localhost:5173/tasks/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.newTask)
+      });
+      this.newTask = { title: '', description: '' };
+      this.fetchTasks();
+    }
+  },
+  mounted() {
+    this.fetchTasks();
   }
 }
 </script>
 
 <template>
   <div>
-    <h1> Task manager </h1>
+    <h1>Task Manager</h1>
     <ul>
-      <li v-for=" task in tasks" : key="task.id">{{task.title}}} </li>
+      <li v-for="task in tasks" :key="task.id">{{ task.title }}</li>
     </ul>
-    <form>
-      <input v-model="new.title" placeholder="Task Title"/>
-      <input v-model="new.description" placeholder="Description" />
-      <button type = "submit" > Add Task </button>
+    <form @submit.prevent="addTask">
+      <input v-model="newTask.title" placeholder="Task Title" />
+      <input v-model="newTask.description" placeholder="Description" />
+      <button type="submit">Add Task</button>
     </form>
   </div>
 </template>
