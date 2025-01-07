@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
-// JSON file structure : ID , TITLE , DESCRIPTION
+// JSON file structure : ID, TITLE , DESCRIPTION
 type Task struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
@@ -14,8 +16,24 @@ type Task struct {
 
 var tasks = []Task{}
 
-// getting tasks
+// getting tasks: modify to get from db
 func GetTask(w http.ResponseWriter, r *http.Request) {
+	rows, err := conn.Query(context.Background(), "SELECT id , title, description FROM tasks")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var task Task
+		error := rows.Scan(&task.ID, &task.Title, &task.Description)
+		if error != nil {
+			log.Println(error) // Log the error and continue
+			continue
+		}
+		tasks = append(tasks, task)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tasks)
 }
