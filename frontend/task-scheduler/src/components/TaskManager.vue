@@ -3,7 +3,7 @@ export default {
   data(){
     return{
       tasks:[],
-      new:{
+      newTask:{
         title: "",
         description :""
       },
